@@ -1,0 +1,16 @@
+.env
+venv/*
+
+# Arquivos de sistema
+.DS_Store
+
+# Arquivos de cache do Python
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+
+# Arquivos de IDEs
+.vscode/
+.idea/
