@@ -1,5 +1,6 @@
 import asyncio
 from crewai import Agent, Task, Crew, Process
+from crewai_tools import SerperDevTool
 from langchain.chat_models import ChatOpenAI
 import pandas as pd
 import dotenv
@@ -19,6 +20,8 @@ feedback_texto = dados["feedback"].iloc[0] if tem_feedback else None
 
 # Inicializa o modelo
 custom_llm = ChatOpenAI(model="gpt-4.1-2025-04-14", temperature=0.2, openai_api_key=key)
+# Inicialização do agente de busca
+serperDevTool = SerperDevTool()
 
 # ---------- Função para criar crews por fluxo ----------
 def criar_fluxo(agentes_tarefas):
@@ -47,7 +50,8 @@ O output deve estar no formato:
                     goal=goal2, 
                     backstory="Atualiza conteúdo com dados recentes.", 
                     allow_delegation=False, 
-                    llm=custom_llm)
+                    llm=custom_llm,
+                    tools=[serperDevTool])
 
     tarefa1 = Task(agent=agente1, description="Identifique trechos desatualizados.", expected_output="Lista de partes desatualizadas", context={"text": texto})
     tarefa2 = Task(agent=agente2, description="Sugira atualizações para os trechos.", expected_output="Correções propostas", context={"text": texto, "previous_output": tarefa1.expected_output})
